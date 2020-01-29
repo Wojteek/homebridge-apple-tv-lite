@@ -105,3 +105,9 @@ typings/
 
 # JetBrains
 .idea
+
+# Homebridge dev
+homebridge
+
+# Dist
+#dist

@@ -2,7 +2,7 @@
   "compilerOptions": {
     "baseUrl": ".",
     "outDir": "dist/",
-    "module": "commonjs",
+    "module": "esnext",
     "moduleResolution": "node",
     "target": "es2017",
     "strict": true,
@@ -12,10 +12,16 @@
     ],
     "esModuleInterop": true,
     "resolveJsonModule": true,
-    "allowSyntheticDefaultImports": true
+    "allowSyntheticDefaultImports": true,
+    "paths": {
+      "@/types/*": [
+        "src/types/*"
+      ]
+    }
   },
   "files": [
-    "src/index.ts"
+    "src/index.ts",
+    "node_modules/hap-nodejs/index.d.ts"
   ],
   "exclude": [
     "node_modules"

@@ -14,8 +14,7 @@ export class AppleTvLiteInstaller {
     homebridge.registerAccessory(
       AppleTvLiteInstaller.pluginName,
       AppleTvLiteInstaller.platformName,
-      AppleTvLite.bind(this, Service, Characteristic),
-      true,
+      AppleTvLite.bind(null, Service, Characteristic),
     );
   }
 }
