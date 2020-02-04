@@ -1,4 +1,4 @@
-import { AppleTV, Message, parseCredentials, scan, NowPlayingInfo } from 'appletv-node-x';
+import { AppleTV, Message, parseCredentials, scan, NowPlayingInfo } from 'node-appletv-x';
 import { EventEmitter } from 'events';
 
 type AppleTV = any;

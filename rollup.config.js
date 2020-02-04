@@ -1,5 +1,6 @@
 import typescript from 'rollup-plugin-typescript2';
 import { terser } from 'rollup-plugin-terser';
+import commonjs from 'rollup-plugin-commonjs';
 
 export default [
   {
@@ -10,8 +11,14 @@ export default [
         format: 'cjs',
       },
     ],
+    external: [
+      'node-appletv-x',
+    ],
     plugins: [
-      typescript(),
+      commonjs(),
+      typescript({
+        rollupCommonJSResolveHack: true,
+      }),
       terser(),
     ],
   },

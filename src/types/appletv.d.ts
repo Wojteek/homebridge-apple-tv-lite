@@ -1,1 +1,1 @@
-declare module 'appletv-node-x';
+declare module 'node-appletv-x';

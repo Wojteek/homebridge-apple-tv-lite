@@ -1,4 +1,4 @@
-import { AppleTV } from 'appletv-node-x';
+import { AppleTV } from 'node-appletv-x';
 import { ServiceInterface, ServiceParameters } from './ServiceInterface';
 
 export class AppleTVControlSwitchService implements ServiceInterface {
