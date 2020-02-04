@@ -235,7 +235,7 @@ ansi@^0.3.0, ansi@~0.3.1:
 
 "appletv-node@https://github.com/Wojteek/appletv-node#master":
   version "1.0.0"
-  resolved "https://github.com/Wojteek/appletv-node#ca641116ad972182ced7d6c1dbd5f20ab77ac5be"
+  resolved "https://github.com/Wojteek/appletv-node#22fb5f10dd8603984a7c30c5a5325427783da40a"
   dependencies:
     camelcase "^5.3.1"
     caporal "^1.3.0"

@@ -1,0 +1,11 @@
+{
+  "accessories": [
+    {
+      "accessory": "AppleTvLite",
+      "name": "AppleTV",
+      "credentials": "APPLE_TV_CREDENTIALS",
+      "updateStateFrequency": 10000,
+      "debug": false
+    }
+  ]
+}
