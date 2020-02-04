@@ -1,4 +1,4 @@
-import { AppleTV } from 'appletv-node';
+import { AppleTV } from 'appletv-node-x';
 import { ServiceInterface, ServiceParameters } from './ServiceInterface';
 
 export class AppleTVControlSwitchService implements ServiceInterface {
@@ -46,9 +46,9 @@ export class AppleTVControlSwitchService implements ServiceInterface {
 
     try {
       if (value) {
-        await device.sendKeyCommand(AppleTV.Key.WakeUp);
+        await device.sendKeyCommand(AppleTV.Key.Tv);
       } else {
-        await device.sendKeyCommand(AppleTV.Key.HomeHold);
+        await device.sendKeyCommand(AppleTV.Key.LongTv);
         await device.sendKeyCommand(AppleTV.Key.Select);
       }
 
@@ -69,18 +69,10 @@ export class AppleTVControlSwitchService implements ServiceInterface {
   private async setUpdateInterval(): Promise<void> {
     const device = await this.root.appleTv.connection;
 
-    let isLocked = false;
+    let timeout: NodeJS.Timeout | number;
 
-    const checkStatus = async (): Promise<void> => {
+    const checkStatus = async (timer: boolean): Promise<void> => {
       try {
-        if (isLocked) {
-          this.root.debug('isLocked = true');
-
-          return;
-        }
-
-        isLocked = true;
-
         const deviceCount = await this.root.appleTv.deviceConnectedCount(device);
 
         this.root.debug(JSON.stringify({
@@ -88,17 +80,24 @@ export class AppleTVControlSwitchService implements ServiceInterface {
         }));
 
         this.isTurnedOn = !!deviceCount;
+
+        if (timer) {
+          timeout = setTimeout(
+            checkStatus,
+            this.root.config.updateStateFrequency,
+            true,
+          );
+        }
       } catch (error) {
         console.error(error);
-      } finally {
-        isLocked = false;
       }
     };
 
-    await checkStatus();
-    setInterval(
+    await checkStatus(false);
+    setTimeout(
       checkStatus,
       this.root.config.updateStateFrequency,
+      true,
     );
   }
 }

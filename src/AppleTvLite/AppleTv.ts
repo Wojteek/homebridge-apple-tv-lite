@@ -1,9 +1,14 @@
-import { AppleTV, Message, parseCredentials, scan } from 'appletv-node';
+import { AppleTV, Message, parseCredentials, scan, NowPlayingInfo } from 'appletv-node-x';
 import { EventEmitter } from 'events';
+
+type AppleTV = any;
+type Message = any;
+type NowPlayingInfo = any;
 
 export const EVENT_POWER_CHANGED = 'powerChanged';
 export const EVENT_MESSAGE = 'message';
 export const EVENT_ERROR = 'error';
+export const EVENT_NOW_PLAYING = 'nowPlaying';
 
 export class AppleTv {
   readonly connection: Promise<AppleTV>;
@@ -23,12 +28,11 @@ export class AppleTv {
         device,
       ] = await scan(parse.uniqueIdentifier);
 
-      const atv = await device.openConnection(parse);
+      this.onError(device);
+      // this.onNowPlaying(device);
+      this.onDeviceUpdate(device);
 
-      this.onError(atv);
-      this.onDeviceUpdate(atv);
-
-      return atv;
+      return device.openConnection(parse);
     } catch (error) {
       throw error;
     }
@@ -41,9 +45,15 @@ export class AppleTv {
   }
 
   private onError(device: AppleTV): void {
-    device.on(EVENT_ERROR, (error: Error) => {
+    device.on(EVENT_ERROR, (error: Error): void => {
       console.error(error.message);
       console.error(error.stack);
+    });
+  }
+
+  private onNowPlaying(device: AppleTV): void {
+    device.on(EVENT_NOW_PLAYING, (info: NowPlayingInfo): void => {
+      console.log(info.toString());
     });
   }
 
