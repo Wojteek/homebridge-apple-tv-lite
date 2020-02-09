@@ -10,12 +10,16 @@ export const EVENT_MESSAGE = 'message';
 export const EVENT_ERROR = 'error';
 export const EVENT_NOW_PLAYING = 'nowPlaying';
 
+interface Config {
+  updateStateFrequency: number;
+}
+
 export class AppleTv {
   readonly connection: Promise<AppleTV>;
 
   readonly event: EventEmitter;
 
-  constructor(credentials: string) {
+  constructor(credentials: string, private readonly config: Config) {
     this.connection = this.getConnection(credentials);
     this.event = new EventEmitter();
   }
@@ -32,16 +36,14 @@ export class AppleTv {
       // this.onNowPlaying(device);
       this.onDeviceUpdate(device);
 
-      return device.openConnection(parse);
+      const connection = await device.openConnection(parse);
+
+      this.updateInterval(connection);
+
+      return connection;
     } catch (error) {
       throw error;
     }
-  }
-
-  async deviceConnectedCount(device: AppleTV): Promise<number> {
-    const { payload }: Message = await device.sendIntroduction();
-
-    return payload.logicalDeviceCount;
   }
 
   private onError(device: AppleTV): void {
@@ -55,6 +57,15 @@ export class AppleTv {
     device.on(EVENT_NOW_PLAYING, (info: NowPlayingInfo): void => {
       console.log(info.toString());
     });
+  }
+
+  private updateInterval(device: AppleTV): void {
+    setTimeout((): void => {
+      device.sendIntroduction().then(({ payload }: Message) => {
+        this.event.emit(EVENT_POWER_CHANGED, !!payload.logicalDeviceCount);
+        this.updateInterval(device);
+      });
+    }, this.config.updateStateFrequency || 10000);
   }
 
   private onDeviceUpdate(device: AppleTV): void {

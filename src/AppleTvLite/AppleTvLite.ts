@@ -4,8 +4,6 @@ import { Services } from './Services/Services';
 import ServiceFactory from './Services';
 
 export class AppleTvLite {
-  private readonly appleTv: AppleTv;
-
   private readonly services: Services;
 
   constructor(
@@ -16,7 +14,6 @@ export class AppleTvLite {
   ) {
     const config = {
       ...configuration,
-      updateStateFrequency: configuration.updateStateFrequency || 50000,
       debug: configuration.debug || false,
     };
 
@@ -36,14 +33,17 @@ export class AppleTvLite {
 
     debug(JSON.stringify(config));
 
-    this.appleTv = new AppleTv(config.credentials);
+    const appleTv = new AppleTv(config.credentials, {
+      updateStateFrequency: configuration.updateStateFrequency || 50000,
+    });
+
     this.services = ServiceFactory.bind(null, {
       service,
       characteristic,
       log,
       config,
       debug,
-      appleTv: this.appleTv,
+      appleTv,
     })();
   }
 

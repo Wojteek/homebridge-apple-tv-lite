@@ -1,5 +1,6 @@
 import { AppleTV } from 'node-appletv-x';
 import { ServiceInterface, ServiceParameters } from './ServiceInterface';
+import { EVENT_POWER_CHANGED } from '../AppleTv';
 
 export class AppleTVControlSwitchService implements ServiceInterface {
   private readonly service: HAPNodeJS.Service;
@@ -12,7 +13,7 @@ export class AppleTVControlSwitchService implements ServiceInterface {
       .on('get', this.getState.bind(this))
       .on('set', this.setState.bind(this));
 
-    this.setUpdateInterval();
+    this.onDeviceState();
   }
 
   getService(): HAPNodeJS.Service {
@@ -66,38 +67,11 @@ export class AppleTVControlSwitchService implements ServiceInterface {
     callback(null, this.isTurnedOn);
   }
 
-  private async setUpdateInterval(): Promise<void> {
-    const device = await this.root.appleTv.connection;
+  private onDeviceState(): void {
+    const { event } = this.root.appleTv;
 
-    let timeout: NodeJS.Timeout | number;
-
-    const checkStatus = async (timer: boolean): Promise<void> => {
-      try {
-        const deviceCount = await this.root.appleTv.deviceConnectedCount(device);
-
-        this.root.debug(JSON.stringify({
-          deviceCount,
-        }));
-
-        this.isTurnedOn = !!deviceCount;
-
-        if (timer) {
-          timeout = setTimeout(
-            checkStatus,
-            this.root.config.updateStateFrequency,
-            true,
-          );
-        }
-      } catch (error) {
-        console.error(error);
-      }
-    };
-
-    await checkStatus(false);
-    setTimeout(
-      checkStatus,
-      this.root.config.updateStateFrequency,
-      true,
-    );
+    event.addListener(EVENT_POWER_CHANGED, (state: boolean): void => {
+      this.isTurnedOn = state;
+    });
   }
 }

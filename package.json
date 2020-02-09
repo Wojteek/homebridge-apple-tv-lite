@@ -7,7 +7,8 @@
   "author": "Wojtek Lewandowski <w.lewandowski@yahoo.com>",
   "license": "MIT",
   "scripts": {
-    "build": "rollup -c"
+    "clean": "rm -rf ./dist",
+    "build": "yarn clean && rollup -c"
   },
   "dependencies": {
     "node-appletv-x": "^1.0.16"
