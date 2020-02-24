@@ -21,7 +21,6 @@
   },
   "files": [
     "src/index.ts",
-    "src/types/appletv.d.ts",
     "node_modules/hap-nodejs/index.d.ts"
   ],
   "exclude": [

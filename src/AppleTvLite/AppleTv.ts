@@ -1,9 +1,5 @@
-import { AppleTV, Message, parseCredentials, scan, NowPlayingInfo } from 'node-appletv-x';
+import { AppleTV, Message, parseCredentials, scan, NowPlayingInfo } from 'appletv-node';
 import { EventEmitter } from 'events';
-
-type AppleTV = any;
-type Message = any;
-type NowPlayingInfo = any;
 
 export const EVENT_POWER_CHANGED = 'powerChanged';
 export const EVENT_MESSAGE = 'message';

@@ -1,4 +1,4 @@
-import { AppleTV } from 'node-appletv-x';
+import { AppleTV } from 'appletv-node';
 import { ServiceInterface, ServiceParameters } from './ServiceInterface';
 import { EVENT_POWER_CHANGED } from '../AppleTv';
 
@@ -47,9 +47,9 @@ export class AppleTVControlSwitchService implements ServiceInterface {
 
     try {
       if (value) {
-        await device.sendKeyCommand(AppleTV.Key.Tv);
+        await device.sendKeyCommand(AppleTV.Key.WakeUp);
       } else {
-        await device.sendKeyCommand(AppleTV.Key.LongTv);
+        await device.sendKeyCommand(AppleTV.Key.HomeHold);
         await device.sendKeyCommand(AppleTV.Key.Select);
       }
 
